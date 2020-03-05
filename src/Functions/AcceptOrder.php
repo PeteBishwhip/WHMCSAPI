@@ -1,6 +1,8 @@
 <?php
 
-namespace WHMCSAPI;
+namespace WHMCSAPI\Functions;
+
+use WHMCSAPI\WHMCSAPI;
 
 class AcceptOrder extends WHMCSAPI
 {
@@ -9,5 +11,9 @@ class AcceptOrder extends WHMCSAPI
     const ATTRIBUTES = [
         'orderid', 'serverid', 'serviceusername', 'servicepassword',
         'registrar', 'sendregistrar', 'autosetup', 'sendemail',
+    ];
+
+    const REQUIRED_ATTRIBUTES = [
+        'orderid',
     ];
 }

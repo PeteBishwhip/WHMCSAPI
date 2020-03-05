@@ -4,7 +4,7 @@
 namespace WHMCSAPI\Exception;
 
 
-class FunctionNotFound extends Exception
+class NotServiceable extends Exception
 {
 
 }
