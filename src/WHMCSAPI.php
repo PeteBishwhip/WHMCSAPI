@@ -39,8 +39,17 @@ class WHMCSAPI
         }
     }
 
+    public function getLastResponse()
+    {
+        return $this->lastResponse;
+    }
+
     public function execute()
     {
+        if (is_null($this->selectedCommand)) {
+            throw new NotServiceable('No command specified.');
+        }
+        
         $postData = [
             'action' => $this->selectedCommand,
             'username' => $this->apiIdentifier,
@@ -53,7 +62,7 @@ class WHMCSAPI
             }
             $postData[$attribute] = $this->{$attribute};
         }
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->whmcsUrl);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -66,5 +75,10 @@ class WHMCSAPI
         curl_close($ch);
 
         return $this->lastResponse = $response;
+    }
+
+    public function reset()
+    {
+        return new self($this->apiIdentifier, $this->apiSecret, $this->whmcsUrl);
     }
 }
