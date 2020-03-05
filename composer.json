@@ -1,0 +1,19 @@
+{
+    "name": "petebishwhip/whmcsapi",
+    "description": "This project is simple. It is an object-oriented library of the WHMCS API functions.",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Bishop",
+            "email": "peter.bishop@sysadmin999.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
