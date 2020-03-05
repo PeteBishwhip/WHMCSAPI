@@ -2,6 +2,9 @@
 
 namespace WHMCSAPI;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7;
 use WHMCSAPI\Exception\Exception;
 use WHMCSAPI\Exception\FunctionNotFound;
 use WHMCSAPI\Exception\NotServiceable;
@@ -75,16 +78,17 @@ class WHMCSAPI
             $postData[$attribute] = $this->{$attribute};
         }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->whmcsUrl);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $response = curl_exec($ch);
-        if (curl_errno($ch)) {
-            throw new Exception(curl_error($ch));
+        try {
+            $client = new Client();
+            $response = $client->request('POST', $this->whmcsUrl, [
+                'form_params' => $postData,
+            ]);
+        } catch (RequestException $e) {
+            if (strpos($e->getMessage(), 'message=Invalid IP')) {
+                throw new NotServiceable('IP has not been whitelisted in WHMCS.');
+            }
+            throw new Exception($e->getMessage());
         }
-        curl_close($ch);
 
         return $this->lastResponse = $response;
     }
