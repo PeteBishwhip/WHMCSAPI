@@ -2,6 +2,11 @@
     "name": "petebishwhip/whmcsapi",
     "description": "This project is simple. It is an object-oriented library of the WHMCS API functions.",
     "type": "library",
+    "autoload": {
+        "psr-4": {
+            "WHMCSAPI\\": "lib/"
+        }
+    },
     "require": {
         "guzzlehttp/guzzle": "~6.0"
     },
