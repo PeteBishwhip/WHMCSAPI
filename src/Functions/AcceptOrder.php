@@ -4,9 +4,9 @@ namespace WHMCSAPI\Functions;
 
 use WHMCSAPI\WHMCSAPI;
 
-class AcceptOrder extends WHMCSAPI
+class AcceptOrder
 {
-    protected $action = 'AcceptOrder';
+    public static $action = 'AcceptOrder';
 
     const ATTRIBUTES = [
         'orderid', 'serverid', 'serviceusername', 'servicepassword',
@@ -16,6 +16,6 @@ class AcceptOrder extends WHMCSAPI
     const REQUIRED_ATTRIBUTES = [
         'orderid',
     ];
-    
+
     const ADDITIONAL_REQUIREMENTS = [];
 }

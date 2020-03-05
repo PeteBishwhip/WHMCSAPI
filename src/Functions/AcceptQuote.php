@@ -4,9 +4,9 @@ namespace WHMCSAPI\Functions;
 
 use WHMCSAPI\WHMCSAPI;
 
-class AcceptQuote extends WHMCSAPI
+class AcceptQuote
 {
-    protected $action = 'AcceptQuote';
+    public static $action = 'AcceptQuote';
 
     const ATTRIBUTES = [
         'quoteid',

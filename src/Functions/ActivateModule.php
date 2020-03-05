@@ -4,9 +4,9 @@ namespace WHMCSAPI\Functions;
 
 use WHMCSAPI\WHMCSAPI;
 
-class ActivateModule extends WHMCSAPI
+class ActivateModule
 {
-    protected $action = 'ActivateModule';
+    public static $action = 'ActivateModule';
 
     const ATTRIBUTES = [
         'moduleType', 'moduleName', 'parameters',
