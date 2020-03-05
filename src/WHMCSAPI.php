@@ -49,7 +49,7 @@ class WHMCSAPI
         if (is_null($this->selectedCommand)) {
             throw new NotServiceable('No command specified.');
         }
-        
+
         $postData = [
             'action' => $this->selectedCommand,
             'username' => $this->apiIdentifier,
@@ -57,8 +57,20 @@ class WHMCSAPI
         ];
 
         foreach ($this->selectedCommand::ATTRIBUTES as $attribute) {
-            if (in_array($attribute, $this->selectedCommand::REQUIRED_ATTRIBUTES) && $this->{$attribute} === null) {
-                throw new NotServiceable("{$attribute} is a required attribute. Not set.");
+            $requiredAttributes = $this->selectedCommand::REQUIRED_ATTRIBUTES;
+            $additionalRequirements = $this->selectedCommand::ADDITIONAL_REQUIREMENTS;
+
+            if (in_array($attribute, $requiredAttributes)) {
+                if ($this->{$attribute} === null) {
+                    throw new NotServiceable("{$attribute} is a required attribute. Not set.");
+                }
+                if (array_key_exists($attribute, $additionalRequirements)) {
+                    if (is_array($additionalRequirements[$attribute]) && !in_array($this->{$attribute}, $additionalRequirements[$attribute])) {
+                        throw new NotServiceable("{$this->{$attribute}} is not an acceptable value for {$attribute}.");
+                    } else {
+                        // @TODO - Add additional requirement types
+                    }
+                }
             }
             $postData[$attribute] = $this->{$attribute};
         }
