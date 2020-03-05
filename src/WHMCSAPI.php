@@ -4,6 +4,7 @@ namespace WHMCSAPI;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7;
 use WHMCSAPI\Exception\Exception;
 use WHMCSAPI\Exception\FunctionNotFound;
 use WHMCSAPI\Exception\NotServiceable;
@@ -15,6 +16,7 @@ class WHMCSAPI
     protected $selectedCommand;
     protected $whmcsUrl;
     protected $lastResponse;
+    protected $responseType = 'json';
 
     public function __construct($apiIdentifier, $apiSecret, $whmcsUrl)
     {
@@ -53,9 +55,10 @@ class WHMCSAPI
         }
 
         $postData = [
-            'action' => $this->selectedCommand,
+            'action' => $this->selectedCommand::$action,
             'username' => $this->apiIdentifier,
             'password' => $this->apiSecret,
+            'responsetype' => $this->responseType,
         ];
 
         foreach ($this->selectedCommand::ATTRIBUTES as $attribute) {
@@ -87,7 +90,7 @@ class WHMCSAPI
 
         try {
             $client = new Client();
-            $response = $client->request('POST', $this->whmcsUrl, [
+            $response = $client->post($this->whmcsUrl, [
                 'form_params' => $postData,
             ]);
         } catch (RequestException $e) {
@@ -96,10 +99,11 @@ class WHMCSAPI
             } elseif (strpos($e->getMessage(), 'message=Invalid Permissions')) {
                 throw new NotServiceable('Your API Identifier does not have permission to use ' . $this->getCommand());
             }
+            
             throw new Exception($e->getMessage());
         }
 
-        return $this->lastResponse = $response;
+        return $this->lastResponse = $response->getBody()->getContents();
     }
 
     public function reset()
@@ -113,5 +117,10 @@ class WHMCSAPI
         end($command);
         $key = key($command);
         return $command[$key];
+    }
+
+    public function setResponseType($type = 'json')
+    {
+        $this->responseType = $type;
     }
 }

@@ -4,9 +4,9 @@ namespace WHMCSAPI\Functions;
 
 use WHMCSAPI\WHMCSAPI;
 
-class AddAnnouncement extends WHMCSAPI
+class AddAnnouncement
 {
-    protected $action = 'AddAnnouncement';
+    public static $action = 'AddAnnouncement';
 
     const ATTRIBUTES = [
         'date', 'title', 'announcement', 'published',
