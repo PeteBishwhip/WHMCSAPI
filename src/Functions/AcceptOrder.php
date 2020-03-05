@@ -16,4 +16,6 @@ class AcceptOrder extends WHMCSAPI
     const REQUIRED_ATTRIBUTES = [
         'orderid',
     ];
+    
+    const ADDITIONAL_REQUIREMENTS = [];
 }

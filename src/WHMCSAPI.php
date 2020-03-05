@@ -71,7 +71,15 @@ class WHMCSAPI
                     if (is_array($additionalRequirements[$attribute]) && !in_array($this->{$attribute}, $additionalRequirements[$attribute])) {
                         throw new NotServiceable("{$this->{$attribute}} is not an acceptable value for {$attribute}.");
                     } else {
-                        // @TODO - Add additional requirement types
+                        if ($additionalRequirements[$attribute] === 'datetime') {
+                            if(!preg_match('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', $this->{$attribute})) {
+                                throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
+                                    . "Expected: Y-m-d H:i:s");
+                            }
+                        }
+                        if ($additionalRequirements[$attribute] === 'array' && !is_array($this->{$attribute})) {
+                            throw new NotServiceable("{$attribute} must be an array.");
+                        }
                     }
                 }
             }

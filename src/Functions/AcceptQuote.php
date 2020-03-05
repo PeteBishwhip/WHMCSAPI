@@ -15,4 +15,6 @@ class AcceptQuote extends WHMCSAPI
     const REQUIRED_ATTRIBUTES = [
         'quoteid',
     ];
+
+    const ADDITIONAL_REQUIREMENTS = [];
 }
