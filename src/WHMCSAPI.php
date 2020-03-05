@@ -4,7 +4,6 @@ namespace WHMCSAPI;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7;
 use WHMCSAPI\Exception\Exception;
 use WHMCSAPI\Exception\FunctionNotFound;
 use WHMCSAPI\Exception\NotServiceable;
@@ -94,6 +93,8 @@ class WHMCSAPI
         } catch (RequestException $e) {
             if (strpos($e->getMessage(), 'message=Invalid IP')) {
                 throw new NotServiceable('IP has not been whitelisted in WHMCS.');
+            } elseif (strpos($e->getMessage(), 'message=Invalid Permissions')) {
+                throw new NotServiceable('Your API Identifier does not have permission to use ' . $this->getCommand());
             }
             throw new Exception($e->getMessage());
         }
@@ -104,5 +105,13 @@ class WHMCSAPI
     public function reset()
     {
         return new self($this->apiIdentifier, $this->apiSecret, $this->whmcsUrl);
+    }
+
+    public function getCommand()
+    {
+        $command = explode('\\', $this->selectedCommand);
+        end($command);
+        $key = key($command);
+        return $command[$key];
     }
 }
