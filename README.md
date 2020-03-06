@@ -24,7 +24,7 @@ After you have imported the library, initialize the wrapper by providing three v
 | $whmcsUrl      | Your WHMCS URL (e.g. https://example.com/whmcs/)     |
 
 ```php
-use src\WHMCSAPI;
+use WHMCSAPI\WHMCSAPI;
 
 // $whmcsApi = new WHMCSAPI('abc123', '123cba', 'https://example.com/whmcs/');
 $whmcsApi = new WHMCSAPI($apiIdentifier, $apiSecret, $whmcsUrl);
