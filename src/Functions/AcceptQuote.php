@@ -6,13 +6,13 @@ class AcceptQuote
 {
     public static $action = 'AcceptQuote';
 
-    const ATTRIBUTES = [
+    public const ATTRIBUTES = [
         'quoteid',
     ];
 
-    const REQUIRED_ATTRIBUTES = [
+    public const REQUIRED_ATTRIBUTES = [
         'quoteid',
     ];
 
-    const ADDITIONAL_REQUIREMENTS = [];
+    public const ADDITIONAL_REQUIREMENTS = [];
 }

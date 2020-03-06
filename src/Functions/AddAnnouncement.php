@@ -6,15 +6,15 @@ class AddAnnouncement
 {
     public static $action = 'AddAnnouncement';
 
-    const ATTRIBUTES = [
+    public const ATTRIBUTES = [
         'date', 'title', 'announcement', 'published',
     ];
 
-    const REQUIRED_ATTRIBUTES = [
+    public const REQUIRED_ATTRIBUTES = [
         'date', 'title', 'announcement',
     ];
 
-    const ADDITIONAL_REQUIREMENTS = [
+    public const ADDITIONAL_REQUIREMENTS = [
         'date' => 'datetime',
     ];
 }
