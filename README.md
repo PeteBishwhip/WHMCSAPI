@@ -7,7 +7,7 @@ To use this wrapper is simple.
 # Requirements
 - PHP 7.3 (It may work on lower. I only test on PHP 7.3 due to dev-dependencies)
 - Composer
-- WHMCS Installation (and License!) - [Buy Here](https://www.whmcs.com/pricing)
+- WHMCS Installation (and License!) - [Buy Here](https://www.whmcs.com/members/aff.php?aff=40067)
 
 ## Usage
 First, import the library:
