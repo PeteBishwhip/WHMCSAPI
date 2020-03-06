@@ -9,5 +9,4 @@ before_script:
   - composer install --no-interaction
 
 script:
-  - curl https://whmcs.peterbishop.rocks/apiAllowIP.php
   - vendor/bin/phpunit tests
