@@ -103,6 +103,12 @@ class WHMCSAPI
                         ) {
                             throw new NotServiceable("{$attribute} must be a valid IP address.");
                         }
+                        if (
+                            $additionalRequirements[$attribute] === 'email'
+                            && $this->inputValidate('email', $this->{$attribute})
+                        ) {
+                            throw new NotServiceable("{$attribute} must be a valid email address.");
+                        }
                     }
                 }
             }
@@ -159,6 +165,8 @@ class WHMCSAPI
                 break;
             case 'array':
                 return (bool) (!is_array($data));
+            case 'email':
+                return (bool) (!filter_var($data, FILTER_VALIDATE_EMAIL));
             default:
                 return false;
         }
