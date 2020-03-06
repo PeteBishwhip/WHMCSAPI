@@ -1,7 +1,13 @@
 # WHMCSAPI - The WHMCS, PHP API Wrapper
+[![Build Status](https://travis-ci.org/PeteBishwhip/WHMCSAPI.svg?branch=master)](https://travis-ci.org/PeteBishwhip/WHMCSAPI)
 
 This project is simple. It is an object-oriented library of the WHMCS API functions.
 To use this wrapper is simple.
+
+# Requirements
+- PHP 7.3 (It may work on lower. I only test on PHP 7.3 due to dev-dependencies)
+- Composer
+- WHMCS Installation (and License!) - [Buy Here](https://www.whmcs.com/pricing)
 
 ## Usage
 First, import the library:

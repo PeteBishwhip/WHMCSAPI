@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 7.2
   - 7.3
 
 before_script:
@@ -9,4 +8,4 @@ before_script:
   - composer install --no-interaction
 
 script:
-  - vendor/bin/phpunit vendor/petebishwhip/whmcsapi/tests
+  - vendor/bin/phpunit tests
