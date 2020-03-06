@@ -2,8 +2,6 @@
 
 namespace WHMCSAPI\Functions;
 
-use WHMCSAPI\WHMCSAPI;
-
 class AddAnnouncement
 {
     public static $action = 'AddAnnouncement';

@@ -2,8 +2,6 @@
 
 namespace WHMCSAPI\Functions;
 
-use WHMCSAPI\WHMCSAPI;
-
 class ActivateModule
 {
     public static $action = 'ActivateModule';

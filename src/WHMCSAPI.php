@@ -17,6 +17,7 @@ class WHMCSAPI
     protected $whmcsUrl;
     protected $lastResponse;
     protected $responseType = 'json';
+    public $action;
 
     public function __construct($apiIdentifier, $apiSecret, $whmcsUrl)
     {
@@ -27,7 +28,7 @@ class WHMCSAPI
 
     public function command($command)
     {
-        $fqcommand = '\WHMCSAPI\Functions\\' . $command;
+        $fqcommand = '\\WHMCSAPI\\Functions\\' . $command;
         if (class_exists($fqcommand)) {
             $this->selectedCommand = $fqcommand;
             $this->setAttributes();
@@ -41,6 +42,7 @@ class WHMCSAPI
         foreach ($this->selectedCommand::ATTRIBUTES as $attribute) {
             $this->{$attribute} = null;
         }
+        $this->action = $this->selectedCommand::$action;
     }
 
     public function getLastResponse()
@@ -55,7 +57,7 @@ class WHMCSAPI
         }
 
         $postData = [
-            'action' => $this->selectedCommand::$action,
+            'action' => $this->action,
             'username' => $this->apiIdentifier,
             'password' => $this->apiSecret,
             'responsetype' => $this->responseType,
@@ -66,21 +68,30 @@ class WHMCSAPI
             $additionalRequirements = $this->selectedCommand::ADDITIONAL_REQUIREMENTS;
 
             if (in_array($attribute, $requiredAttributes)) {
-                if ($this->{$attribute} === null) {
+                if (is_null($this->{$attribute})) {
                     throw new NotServiceable("{$attribute} is a required attribute. Not set.");
                 }
                 if (array_key_exists($attribute, $additionalRequirements)) {
-                    if (is_array($additionalRequirements[$attribute]) && !in_array($this->{$attribute}, $additionalRequirements[$attribute])) {
+                    if (is_array($additionalRequirements[$attribute])
+                        && !in_array($this->{$attribute}, $additionalRequirements[$attribute])) {
                         throw new NotServiceable("{$this->{$attribute}} is not an acceptable value for {$attribute}.");
                     } else {
-                        if ($additionalRequirements[$attribute] === 'datetime') {
-                            if(!preg_match('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', $this->{$attribute})) {
-                                throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
-                                    . "Expected: Y-m-d H:i:s");
-                            }
+                        if ($additionalRequirements[$attribute] === 'datetime'
+                            && $this->inputValidate('datetime', $this->{$attribute})) {
+                            throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
+                                . "Expected: Y-m-d H:i:s");
                         }
-                        if ($additionalRequirements[$attribute] === 'array' && !is_array($this->{$attribute})) {
+                        if ($additionalRequirements[$attribute] === 'array'
+                            && $this->inputValidate('array', $this->{$attribute})) {
                             throw new NotServiceable("{$attribute} must be an array.");
+                        }
+                        if ($additionalRequirements[$attribute] === 'numeric'
+                            && $this->inputValidate('numeric', $this->{$attribute})) {
+                            throw new NotServiceable("{$attribute} must be an numerical value.");
+                        }
+                        if ($additionalRequirements[$attribute] === 'ipaddress'
+                            && $this->inputValidate('ipaddress', $this->{$attribute})) {
+                            throw new NotServiceable("{$attribute} must be a valid IP address.");
                         }
                     }
                 }
@@ -99,7 +110,7 @@ class WHMCSAPI
             } elseif (strpos($e->getMessage(), 'message=Invalid Permissions')) {
                 throw new NotServiceable('Your API Identifier does not have permission to use ' . $this->getCommand());
             }
-            
+
             throw new Exception($e->getMessage());
         }
 
@@ -122,5 +133,24 @@ class WHMCSAPI
     public function setResponseType($type = 'json')
     {
         $this->responseType = $type;
+    }
+
+    public function inputValidate($type, $data)
+    {
+        switch ($type) {
+            case 'ipaddress':
+                return (bool) (!filter_var($data, FILTER_VALIDATE_IP));
+                break;
+            case 'datetime':
+                return (bool) (!preg_match('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', $data));
+                break;
+            case 'numeric':
+                return (bool) (!is_numeric($data));
+                break;
+            case 'array':
+                return (bool) (!is_array($data));
+            default:
+                return false;
+        }
     }
 }

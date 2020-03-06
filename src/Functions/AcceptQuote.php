@@ -2,8 +2,6 @@
 
 namespace WHMCSAPI\Functions;
 
-use WHMCSAPI\WHMCSAPI;
-
 class AcceptQuote
 {
     public static $action = 'AcceptQuote';
