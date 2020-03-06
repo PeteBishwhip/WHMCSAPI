@@ -6,16 +6,16 @@ class ActivateModule
 {
     public static $action = 'ActivateModule';
 
-    const ATTRIBUTES = [
+    public const ATTRIBUTES = [
         'moduleType', 'moduleName', 'parameters',
     ];
 
-    const REQUIRED_ATTRIBUTES = [
+    public const REQUIRED_ATTRIBUTES = [
         'moduleType',
         'moduleName',
     ];
 
-    const ADDITIONAL_REQUIREMENTS = [
+    public const ADDITIONAL_REQUIREMENTS = [
         'moduleType' => [
             'gateway', 'server', 'addon', 'registrar',
         ],

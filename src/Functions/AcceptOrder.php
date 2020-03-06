@@ -6,14 +6,14 @@ class AcceptOrder
 {
     public static $action = 'AcceptOrder';
 
-    const ATTRIBUTES = [
+    public const ATTRIBUTES = [
         'orderid', 'serverid', 'serviceusername', 'servicepassword',
         'registrar', 'sendregistrar', 'autosetup', 'sendemail',
     ];
 
-    const REQUIRED_ATTRIBUTES = [
+    public const REQUIRED_ATTRIBUTES = [
         'orderid',
     ];
 
-    const ADDITIONAL_REQUIREMENTS = [];
+    public const ADDITIONAL_REQUIREMENTS = [];
 }

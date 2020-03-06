@@ -72,25 +72,35 @@ class WHMCSAPI
                     throw new NotServiceable("{$attribute} is a required attribute. Not set.");
                 }
                 if (array_key_exists($attribute, $additionalRequirements)) {
-                    if (is_array($additionalRequirements[$attribute])
-                        && !in_array($this->{$attribute}, $additionalRequirements[$attribute])) {
+                    if (
+                        is_array($additionalRequirements[$attribute])
+                        && !in_array($this->{$attribute}, $additionalRequirements[$attribute])
+                    ) {
                         throw new NotServiceable("{$this->{$attribute}} is not an acceptable value for {$attribute}.");
                     } else {
-                        if ($additionalRequirements[$attribute] === 'datetime'
-                            && $this->inputValidate('datetime', $this->{$attribute})) {
+                        if (
+                            $additionalRequirements[$attribute] === 'datetime'
+                            && $this->inputValidate('datetime', $this->{$attribute})
+                        ) {
                             throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
                                 . "Expected: Y-m-d H:i:s");
                         }
-                        if ($additionalRequirements[$attribute] === 'array'
-                            && $this->inputValidate('array', $this->{$attribute})) {
+                        if (
+                            $additionalRequirements[$attribute] === 'array'
+                            && $this->inputValidate('array', $this->{$attribute})
+                        ) {
                             throw new NotServiceable("{$attribute} must be an array.");
                         }
-                        if ($additionalRequirements[$attribute] === 'numeric'
-                            && $this->inputValidate('numeric', $this->{$attribute})) {
+                        if (
+                            $additionalRequirements[$attribute] === 'numeric'
+                            && $this->inputValidate('numeric', $this->{$attribute})
+                        ) {
                             throw new NotServiceable("{$attribute} must be an numerical value.");
                         }
-                        if ($additionalRequirements[$attribute] === 'ipaddress'
-                            && $this->inputValidate('ipaddress', $this->{$attribute})) {
+                        if (
+                            $additionalRequirements[$attribute] === 'ipaddress'
+                            && $this->inputValidate('ipaddress', $this->{$attribute})
+                        ) {
                             throw new NotServiceable("{$attribute} must be a valid IP address.");
                         }
                     }
