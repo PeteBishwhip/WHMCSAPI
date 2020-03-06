@@ -5,7 +5,7 @@ namespace WHMCSAPI\Tests\Functions;
 use WHMCSAPI\Exception\NotServiceable;
 use WHMCSAPI\Tests\BaseTest;
 
-class AddBillableItem extends BaseTest
+class AddBillableItemTest extends BaseTest
 {
     public function testCanUseAddBillableItemCommand()
     {
