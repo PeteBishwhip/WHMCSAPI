@@ -9,6 +9,7 @@ class UpdateQuoteTest extends BaseTest
 {
     public function testCanUseUpdateQuoteCommand()
     {
+        $GLOBALS['whmcsApi']->quoteid = 1;
         $GLOBALS['whmcsApi']->command('UpdateQuote');
         $this->assertEquals('UpdateQuote', $GLOBALS['whmcsApi']->action);
     }
@@ -22,6 +23,7 @@ class UpdateQuoteTest extends BaseTest
 
     public function testAttributesCanBeSet()
     {
+        $GLOBALS['whmcsApi']->quoteid = 1;
         $GLOBALS['whmcsApi']->stage = 'Accepted';
         $GLOBALS['whmcsApi']->subject = 'ABC123';
         $this->assertEquals('Accepted', $GLOBALS['whmcsApi']->stage);
