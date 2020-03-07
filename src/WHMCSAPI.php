@@ -39,8 +39,15 @@ class WHMCSAPI
 
     protected function setAttributes()
     {
+        if (defined($this->selectedCommand . '::DEFAULTS')) {
+            $attributeDefaults = $this->selectedCommand::DEFAULTS;
+        }
         foreach ($this->selectedCommand::ATTRIBUTES as $attribute) {
-            $this->{$attribute} = null;
+            if (isset($attributeDefaults) && array_key_exists($attribute, $attributeDefaults)) {
+                $this->{$attribute} = $attributeDefaults[$attribute];
+            } else {
+                $this->{$attribute} = null;
+            }
         }
         $this->action = $this->selectedCommand::$action;
     }
@@ -81,6 +88,13 @@ class WHMCSAPI
                         if (
                             $additionalRequirements[$attribute] === 'datetime'
                             && $this->inputValidate('datetime', $this->{$attribute})
+                        ) {
+                            throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
+                                . "Expected: Y-m-d H:i:s");
+                        }
+                        if (
+                            $additionalRequirements[$attribute] === 'date'
+                            && $this->inputValidate('date', $this->{$attribute})
                         ) {
                             throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
                                 . "Expected: Y-m-d H:i:s");
@@ -166,6 +180,9 @@ class WHMCSAPI
             case 'datetime':
                 return (bool) (!preg_match('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', $data));
                 break;
+            case 'date':
+                return (bool) (!preg_match('(\d{4}-\d{2}-\d{2})', $data));
+                break;
             case 'numeric':
                 return (bool) (!is_numeric($data));
                 break;
@@ -175,6 +192,7 @@ class WHMCSAPI
                 return (bool) (!filter_var($data, FILTER_VALIDATE_EMAIL));
             case 'float':
                 return (bool) (is_numeric($data)) ? (!is_float($data + 0)) : true;
+                break;
             default:
                 return true;
         }
