@@ -109,6 +109,12 @@ class WHMCSAPI
                         ) {
                             throw new NotServiceable("{$attribute} must be a valid email address.");
                         }
+                        if (
+                            $additionalRequirements[$attribute] === 'float'
+                            && $this->inputValidate('float', $this->{$attribute})
+                        ) {
+                            throw new NotServiceable("{$attribute} must be a valid numerical value. (float)");
+                        }
                     }
                 }
             }
@@ -167,8 +173,10 @@ class WHMCSAPI
                 return (bool) (!is_array($data));
             case 'email':
                 return (bool) (!filter_var($data, FILTER_VALIDATE_EMAIL));
+            case 'float':
+                return (bool) (is_numeric($data)) ? (!is_float($data + 0)) : true;
             default:
-                return false;
+                return true;
         }
     }
 }
