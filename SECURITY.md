@@ -8,7 +8,7 @@ PHP Version 7.3.x+ is currently supported.
 #### WHMCSAPI Releases
 | Version         | Supported          |
 | --------------- | ------------------ |
-| 1.0.0-beta.1    | :white_check_mark: |
+| 1.0.0-alpha.1   | :white_check_mark: |
 | Master (branch) | :x:                |
 
 ## Reporting a Vulnerability
