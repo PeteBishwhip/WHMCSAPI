@@ -43,6 +43,25 @@ class AddClientTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('firstname', $result);
+        $this->assertArrayHasKey('lastname', $result);
+        $this->assertArrayHasKey('companyname', $result);
+        $this->assertArrayHasKey('email', $result);
+        $this->assertArrayHasKey('address1', $result);
+        $this->assertArrayHasKey('address2', $result);
+        $this->assertArrayHasKey('city', $result);
+        $this->assertArrayHasKey('state', $result);
+        $this->assertArrayHasKey('postcode', $result);
+        $this->assertArrayHasKey('country', $result);
+        $this->assertArrayHasKey('phonenumber', $result);
+        $this->assertArrayHasKey('tax_id', $result);
+        $this->assertArrayHasKey('password2', $result);
+        $this->assertArrayHasKey('noemail', $result);
+        unset($result['username'], $result['password'], $result['responsetype']);
+        foreach ($result as $attribute => $value) {
+            $this->assertEquals($GLOBALS['whmcsApi']->{$attribute}, $value);
+        }
     }
 }

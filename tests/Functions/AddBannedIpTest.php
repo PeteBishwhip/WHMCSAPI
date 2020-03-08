@@ -32,6 +32,15 @@ class AddBannedIpTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('ip', $result);
+        $this->assertArrayHasKey('reason', $result);
+        $this->assertArrayHasKey('days', $result);
+        $this->assertArrayHasKey('expires', $result);
+        $this->assertEquals('1.2.3.4', $result['ip']);
+        $this->assertEquals('PHPUnit Testing', $result['reason']);
+        $this->assertEquals(7, $result['days']);
+        $this->assertTrue($GLOBALS['whmcsApi']->inputValidate('datetime', $result['expires']));
     }
 }

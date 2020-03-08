@@ -40,6 +40,13 @@ class AddAnnouncementTest extends BaseTest
         // Finish test - Set date back to correct datetime
         $GLOBALS['whmcsApi']->date = date('Y-m-d H:i:s');
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('title', $result);
+        $this->assertArrayHasKey('announcement', $result);
+        $this->assertArrayHasKey('date', $result);
+        $this->assertEquals('This is a title!', $result['title']);
+        $this->assertEquals('This is my announcement!', $result['announcement']);
+        $this->assertTrue($GLOBALS['whmcsApi']->inputValidate('datetime', $result['date']));
     }
 }

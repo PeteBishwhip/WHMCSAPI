@@ -31,6 +31,13 @@ class AddCancelRequestTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('serviceid', $result);
+        $this->assertArrayHasKey('type', $result);
+        $this->assertArrayHasKey('reason', $result);
+        $this->assertEquals(1, $result['serviceid']);
+        $this->assertEquals('Immediate', $result['type']);
+        $this->assertEquals('Testing', $result['reason']);
     }
 }

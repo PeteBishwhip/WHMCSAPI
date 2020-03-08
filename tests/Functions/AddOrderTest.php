@@ -49,6 +49,19 @@ class AddOrderTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('clientid', $result);
+        $this->assertArrayHasKey('paymentmethod', $result);
+        $this->assertArrayHasKey('pid', $result);
+        $this->assertArrayHasKey('domain', $result);
+        $this->assertArrayHasKey('nameserver1', $result);
+        $this->assertArrayHasKey('nameserver2', $result);
+        $this->assertArrayHasKey('noemail', $result);
+        $this->assertArrayHasKey('noinvoiceemail', $result);
+        unset($result['username'], $result['password'], $result['responsetype']);
+        foreach ($result as $attribute => $value) {
+            $this->assertEquals($GLOBALS['whmcsApi']->{$attribute}, $value);
+        }
     }
 }

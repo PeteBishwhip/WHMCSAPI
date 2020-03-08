@@ -101,7 +101,7 @@ class WHMCSAPI
                     $this->inputValidate($additionalRequirements[$attribute], $this->{$attribute}, $attribute);
                 }
 
-                if ($additionalRequirements === 'boolean') {
+                if ($additionalRequirements[$attribute] === 'boolean') {
                     $this->{$attribute} = ($this->{$attribute}) ? '1' : '0';
                 }
             }

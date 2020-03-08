@@ -29,6 +29,9 @@ class AcceptQuoteTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('quoteid', $result);
+        $this->assertEquals(1, $result['quoteid']);
     }
 }

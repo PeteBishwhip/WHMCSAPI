@@ -45,6 +45,15 @@ class AddTransactionTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('paymentmethod', $result);
+        $this->assertArrayHasKey('userid', $result);
+        $this->assertArrayHasKey('transid', $result);
+        $this->assertArrayHasKey('credit', $result);
+        unset($result['username'], $result['password'], $result['responsetype']);
+        foreach ($result as $attribute => $value) {
+            $this->assertEquals($GLOBALS['whmcsApi']->{$attribute}, $value);
+        }
     }
 }

@@ -40,13 +40,22 @@ class AddInvoicePaymentTest extends BaseTest
         $GLOBALS['whmcsApi']->gateway = 'mailin';
         $GLOBALS['whmcsApi']->amount = 1.23;
         $GLOBALS['whmcsApi']->date = date('Y-m-d');
-        $GLOBALS['whmcsApi']->adminid = 1;
         $this->assertEquals(1.23, $GLOBALS['whmcsApi']->amount);
     }
 
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('invoiceid', $result);
+        $this->assertArrayHasKey('transid', $result);
+        $this->assertArrayHasKey('gateway', $result);
+        $this->assertArrayHasKey('amount', $result);
+        $this->assertArrayHasKey('date', $result);
+        unset($result['username'], $result['password'], $result['responsetype']);
+        foreach ($result as $attribute => $value) {
+            $this->assertEquals($GLOBALS['whmcsApi']->{$attribute}, $value);
+        }
     }
 }
