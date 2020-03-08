@@ -78,6 +78,13 @@ class WHMCSAPI
                 if (is_null($this->{$attribute})) {
                     throw new NotServiceable("{$attribute} is a required attribute. Not set.");
                 }
+
+                if ($this->{$attribute} === false) {
+                    $this->{$attribute} = '0';
+                } elseif ($this->{$attribute} === true) {
+                    $this->{$attribute} = '1';
+                }
+
                 if (array_key_exists($attribute, $additionalRequirements)) {
                     if (
                         is_array($additionalRequirements[$attribute])
@@ -132,7 +139,10 @@ class WHMCSAPI
                     }
                 }
             }
-            $postData[$attribute] = $this->{$attribute};
+            
+            if (is_null($this->{$attribute})) {
+                $postData[$attribute] = $this->{$attribute};
+            }
         }
 
         try {
