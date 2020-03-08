@@ -12,7 +12,7 @@ Before contributing, please ensure you read the following:
 * Only Pull Request up to date with master will be accepted. Ensure you're branch is up to date before submission.
 
 ## Local Testing
-If you would like to run the tests locally before pushing your changes, update the details in `tests/BaseTest` with 
+If you would like to run the tests locally before pushing your changes, update the details in `tests/BaseTest.php` with 
 your own WHMCS credentials. Using ours will not work and the tests will fail as the test environment is strictly 
 restricted to Travis-CI IP addresses only.
 
