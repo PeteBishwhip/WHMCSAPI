@@ -88,7 +88,9 @@ class WHMCSAPI
 
             // After checking if the attribute is required, if it's null, stop processing and
             // do not include it in the payload.
-            if (is_null($this->{$attribute})) continue;
+            if (is_null($this->{$attribute})) {
+                continue;
+            }
 
             if (array_key_exists($attribute, $additionalRequirements)) {
                 if (
@@ -101,15 +103,19 @@ class WHMCSAPI
                         $additionalRequirements[$attribute] === 'datetime'
                         && $this->inputValidate('datetime', $this->{$attribute})
                     ) {
-                        throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
-                            . "Expected: Y-m-d H:i:s");
+                        throw new NotServiceable(
+                            "{$this->{$attribute}} is not a valid format for {$attribute}. "
+                            . "Expected: Y-m-d H:i:s"
+                        );
                     }
                     if (
                         $additionalRequirements[$attribute] === 'date'
                         && $this->inputValidate('date', $this->{$attribute})
                     ) {
-                        throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
-                            . "Expected: Y-m-d H:i:s");
+                        throw new NotServiceable(
+                            "{$this->{$attribute}} is not a valid format for {$attribute}. "
+                            . "Expected: Y-m-d H:i:s"
+                        );
                     }
                     if (
                         $additionalRequirements[$attribute] === 'array'
@@ -149,9 +155,12 @@ class WHMCSAPI
 
         try {
             $client = new Client();
-            $response = $client->post($this->whmcsUrl, [
+            $response = $client->post(
+                $this->whmcsUrl,
+                [
                 'form_params' => $postData,
-            ]);
+                ]
+            );
         } catch (RequestException $e) {
             if (strpos($e->getMessage(), 'message=Invalid IP')) {
                 throw new NotServiceable('IP has not been whitelisted in WHMCS.');
