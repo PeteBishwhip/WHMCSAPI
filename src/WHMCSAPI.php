@@ -139,8 +139,8 @@ class WHMCSAPI
                     }
                 }
             }
-            
-            if (is_null($this->{$attribute})) {
+
+            if (!is_null($this->{$attribute})) {
                 $postData[$attribute] = $this->{$attribute};
             }
         }
