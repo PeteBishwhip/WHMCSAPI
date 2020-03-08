@@ -31,7 +31,6 @@ class AddProjectMessageTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        var_dump($result);
         $this->assertStringContainsString('{"result":', $result);
     }
 }
