@@ -11,9 +11,9 @@ To use this wrapper is simple.
 - WHMCS Installation (and License!) - [Buy Here](https://www.whmcs.com/members/aff.php?aff=40067)
 
 ## Usage
-First, import the library:
+First, import the library. As WHMCSAPI is currently in alpha/beta status, set the minimum version to `1.0@alpha`:
 ```bash
-composer require PeteBishwhip/WHMCSAPI
+composer require PeteBishwhip/WHMCSAPI:"^1.0@alpha"
 ```
 
 After you have imported the library, initialize the wrapper by providing three values.
