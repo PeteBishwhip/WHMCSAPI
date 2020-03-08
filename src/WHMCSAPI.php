@@ -78,68 +78,45 @@ class WHMCSAPI
                 if (is_null($this->{$attribute})) {
                     throw new NotServiceable("{$attribute} is a required attribute. Not set.");
                 }
-                if (array_key_exists($attribute, $additionalRequirements)) {
-                    if (
-                        is_array($additionalRequirements[$attribute])
-                        && !in_array($this->{$attribute}, $additionalRequirements[$attribute])
-                    ) {
-                        throw new NotServiceable("{$this->{$attribute}} is not an acceptable value for {$attribute}.");
-                    } else {
-                        if (
-                            $additionalRequirements[$attribute] === 'datetime'
-                            && $this->inputValidate('datetime', $this->{$attribute})
-                        ) {
-                            throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
-                                . "Expected: Y-m-d H:i:s");
-                        }
-                        if (
-                            $additionalRequirements[$attribute] === 'date'
-                            && $this->inputValidate('date', $this->{$attribute})
-                        ) {
-                            throw new NotServiceable("{$this->{$attribute}} is not a valid format for {$attribute}. "
-                                . "Expected: Y-m-d H:i:s");
-                        }
-                        if (
-                            $additionalRequirements[$attribute] === 'array'
-                            && $this->inputValidate('array', $this->{$attribute})
-                        ) {
-                            throw new NotServiceable("{$attribute} must be an array.");
-                        }
-                        if (
-                            $additionalRequirements[$attribute] === 'numeric'
-                            && $this->inputValidate('numeric', $this->{$attribute})
-                        ) {
-                            throw new NotServiceable("{$attribute} must be an numerical value.");
-                        }
-                        if (
-                            $additionalRequirements[$attribute] === 'ipaddress'
-                            && $this->inputValidate('ipaddress', $this->{$attribute})
-                        ) {
-                            throw new NotServiceable("{$attribute} must be a valid IP address.");
-                        }
-                        if (
-                            $additionalRequirements[$attribute] === 'email'
-                            && $this->inputValidate('email', $this->{$attribute})
-                        ) {
-                            throw new NotServiceable("{$attribute} must be a valid email address.");
-                        }
-                        if (
-                            $additionalRequirements[$attribute] === 'float'
-                            && $this->inputValidate('float', $this->{$attribute})
-                        ) {
-                            throw new NotServiceable("{$attribute} must be a valid numerical value. (float)");
-                        }
-                    }
+
+                if ($this->{$attribute} === false) {
+                    $this->{$attribute} = '0';
+                } elseif ($this->{$attribute} === true) {
+                    $this->{$attribute} = '1';
                 }
             }
+
+            // After checking if the attribute is required, if it's null, stop processing and
+            // do not include it in the payload.
+            if (is_null($this->{$attribute})) {
+                continue;
+            }
+
+            if (array_key_exists($attribute, $additionalRequirements)) {
+                if (is_array($additionalRequirements[$attribute])) {
+                    if (!in_array($this->{$attribute}, $additionalRequirements[$attribute])) {
+                        throw new NotServiceable("{$this->{$attribute}} is not an acceptable value for {$attribute}.");
+                    }
+                } else {
+                    $this->inputValidate($additionalRequirements[$attribute], $this->{$attribute}, $attribute);
+                }
+
+                if ($additionalRequirements === 'boolean') {
+                    $this->{$attribute} = ($this->{$attribute}) ? '1' : '0';
+                }
+            }
+
             $postData[$attribute] = $this->{$attribute};
         }
 
         try {
             $client = new Client();
-            $response = $client->post($this->whmcsUrl, [
+            $response = $client->post(
+                $this->whmcsUrl,
+                [
                 'form_params' => $postData,
-            ]);
+                ]
+            );
         } catch (RequestException $e) {
             if (strpos($e->getMessage(), 'message=Invalid IP')) {
                 throw new NotServiceable('IP has not been whitelisted in WHMCS.');
@@ -171,30 +148,48 @@ class WHMCSAPI
         $this->responseType = $type;
     }
 
-    public function inputValidate($type, $data)
+    public function inputValidate($type, $data, $attribute = false)
     {
+        if (!$attribute) {
+            $attribute = $type;
+        }
+
         switch ($type) {
             case 'ipaddress':
-                return (bool) (!filter_var($data, FILTER_VALIDATE_IP));
+                $valid = (bool) (filter_var($data, FILTER_VALIDATE_IP));
                 break;
             case 'datetime':
-                return (bool) (!preg_match('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', $data));
+                $valid = (bool) (preg_match('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', $data));
                 break;
             case 'date':
-                return (bool) (!preg_match('(\d{4}-\d{2}-\d{2})', $data));
+                $valid = (bool) (preg_match('(\d{4}-\d{2}-\d{2})', $data));
                 break;
             case 'numeric':
-                return (bool) (!is_numeric($data));
+                $valid = (bool) (is_numeric($data));
                 break;
             case 'array':
-                return (bool) (!is_array($data));
+                $valid = (bool) (is_array($data));
+                break;
             case 'email':
-                return (bool) (!filter_var($data, FILTER_VALIDATE_EMAIL));
+                $valid = (bool) (filter_var($data, FILTER_VALIDATE_EMAIL));
+                break;
             case 'float':
-                return (bool) (is_numeric($data)) ? (!is_float($data + 0)) : true;
+                $valid =  (bool) (is_numeric($data)) ? (is_float($data + 0)) : false;
+                break;
+            case 'boolean':
+                $valid = (bool) (is_bool($data));
                 break;
             default:
-                return true;
+                $valid =  false;
+                break;
         }
+
+        if (!$valid) {
+            throw new NotServiceable(
+                "{$attribute} must be of {$type}. Invalid input provided."
+            );
+        }
+
+        return $valid;
     }
 }

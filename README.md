@@ -1,5 +1,6 @@
 # WHMCSAPI - The WHMCS, PHP API Wrapper
 [![Build Status](https://travis-ci.org/PeteBishwhip/WHMCSAPI.svg?branch=master)](https://travis-ci.org/PeteBishwhip/WHMCSAPI)
+[![Mergify Status][mergify-status]][mergify]
 
 This project is simple. It is an object-oriented library of the WHMCS API functions.
 To use this wrapper is simple.
@@ -10,9 +11,9 @@ To use this wrapper is simple.
 - WHMCS Installation (and License!) - [Buy Here](https://www.whmcs.com/members/aff.php?aff=40067)
 
 ## Usage
-First, import the library:
+First, import the library. As WHMCSAPI is currently in alpha/beta status, set the minimum version to `1.0@alpha`:
 ```bash
-composer require PeteBishwhip/WHMCSAPI
+composer require PeteBishwhip/WHMCSAPI:"^1.0@alpha"
 ```
 
 After you have imported the library, initialize the wrapper by providing three values.
@@ -56,3 +57,6 @@ $result = $whmcsApi->execute();
 
 ## Contributing
 Please feel free to contribute. A proper "Contributing" guide will be created in due course.
+
+[mergify]: https://mergify.io
+[mergify-status]: https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/PeteBishwhip/WHMCSAPI&style=flat
