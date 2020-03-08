@@ -48,6 +48,17 @@ class AddPayMethodTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":"success"', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('clientid', $result);
+        $this->assertArrayHasKey('description', $result);
+        $this->assertArrayHasKey('gateway_module_name', $result);
+        $this->assertArrayHasKey('card_number', $result);
+        $this->assertArrayHasKey('card_expiry', $result);
+        $this->assertArrayHasKey('set_as_default', $result);
+        unset($result['username'], $result['password'], $result['responsetype']);
+        foreach ($result as $attribute => $value) {
+            $this->assertEquals($GLOBALS['whmcsApi']->{$attribute}, $value);
+        }
     }
 }

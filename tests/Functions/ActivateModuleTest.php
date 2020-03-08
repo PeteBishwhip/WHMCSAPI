@@ -37,6 +37,11 @@ class ActivateModuleTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('moduleType', $result);
+        $this->assertArrayHasKey('moduleName', $result);
+        $this->assertEquals('gateway', $result['moduleType']);
+        $this->assertEquals('mailin', $result['moduleName']);
     }
 }

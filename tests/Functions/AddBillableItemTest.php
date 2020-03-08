@@ -22,7 +22,7 @@ class AddBillableItemTest extends BaseTest
 
     public function testAttributesCanBeSet()
     {
-        $GLOBALS['whmcsApi']->clientid = '1';
+        $GLOBALS['whmcsApi']->clientid = 1;
         $GLOBALS['whmcsApi']->description = 'PHPUnit Testing';
         $GLOBALS['whmcsApi']->amount = 7.50;
         $GLOBALS['whmcsApi']->invoiceaction = 'noinvoice';
@@ -37,6 +37,20 @@ class AddBillableItemTest extends BaseTest
     public function testCanMakeAPICall()
     {
         $result = $GLOBALS['whmcsApi']->execute();
-        $this->assertStringContainsString('{"result":', $result);
+        $this->assertJson($result);
+        $result = (json_decode($result, true))['postData'];
+        $this->assertArrayHasKey('clientid', $result);
+        $this->assertArrayHasKey('description', $result);
+        $this->assertArrayHasKey('amount', $result);
+        $this->assertArrayHasKey('invoiceaction', $result);
+        $this->assertArrayHasKey('recur', $result);
+        $this->assertArrayHasKey('recurcycle', $result);
+        $this->assertArrayHasKey('recurfor', $result);
+        $this->assertArrayHasKey('duedate', $result);
+        $this->assertArrayHasKey('hours', $result);
+        $this->assertEquals(1, $result['clientid']);
+        $this->assertEquals('noinvoice', $result['invoiceaction']);
+        $this->assertEquals(7.50, $result['amount']);
+        $this->assertTrue($GLOBALS['whmcsApi']->inputValidate('float', $result['amount']));
     }
 }

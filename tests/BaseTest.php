@@ -7,8 +7,8 @@ use WHMCSAPI\Exception\NotServiceable;
 
 class BaseTest extends TestCase
 {
-    public static $apiIdentifier = 'jWgmIbNWJm8XSVzkWGrVyEPdukb8Y4C6';
-    public static $apiSecret = 'wJ1Huc0CSRpruhsfMerI7WLiu6X5wsSZ';
+    public static $apiIdentifier = 'randomValueNotRequired';
+    public static $apiSecret = 'randomValueNotRequired';
     public static $testEnvironment = 'https://whmcs.peterbishop.rocks';
 
     public static function setUpBeforeClass() : void
