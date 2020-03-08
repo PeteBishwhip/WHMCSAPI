@@ -100,6 +100,10 @@ class WHMCSAPI
                 } else {
                     $this->inputValidate($additionalRequirements[$attribute], $this->{$attribute}, $attribute);
                 }
+
+                if ($additionalRequirements === 'boolean') {
+                    $this->{$attribute} = ($this->{$attribute}) ? '1' : '0';
+                }
             }
 
             $postData[$attribute] = $this->{$attribute};
@@ -171,6 +175,9 @@ class WHMCSAPI
                 break;
             case 'float':
                 $valid =  (bool) (is_numeric($data)) ? (is_float($data + 0)) : false;
+                break;
+            case 'boolean':
+                $valid = (bool) (is_bool($data));
                 break;
             default:
                 $valid =  false;
