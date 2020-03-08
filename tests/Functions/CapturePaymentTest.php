@@ -8,7 +8,7 @@ use WHMCSAPI\Tests\BaseTest;
 class CapturePaymentTest extends BaseTest
 {
 
-    public function testCanUseAcceptOrderCommand()
+    public function testCanUseCapturePaymentCommand()
     {
         $GLOBALS['whmcsApi']->command('CapturePayment');
         $this->assertEquals('CapturePayment', $GLOBALS['whmcsApi']->action);
