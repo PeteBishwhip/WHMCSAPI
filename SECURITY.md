@@ -5,10 +5,11 @@
 #### PHP
 PHP Version 7.3.x+ is currently supported.
 
-| Version        | Supported          |
-| -------------- | ------------------ |
-| 1.0.0-beta.1   | :white_check_mark: |
-| Master         | :x:                |
+#### WHMCSAPI Releases
+| Version         | Supported          |
+| --------------- | ------------------ |
+| 1.0.0-beta.1    | :white_check_mark: |
+| Master (branch) | :x:                |
 
 ## Reporting a Vulnerability
 
