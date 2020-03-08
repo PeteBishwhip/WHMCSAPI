@@ -23,7 +23,7 @@ class AddProductTest extends BaseTest
 
     public function testDefaultValuesAreSet()
     {
-        $class = '\\WHMCSAPI\\Functions\\AddPayMethod';
+        $class = '\\WHMCSAPI\\Functions\\AddProduct';
         if (defined($class . '::DEFAULTS')) {
             foreach ($class::DEFAULTS as $attribute => $default) {
                 $this->assertEquals($default, $GLOBALS['whmcsApi']->$attribute);
