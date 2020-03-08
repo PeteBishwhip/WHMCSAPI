@@ -30,7 +30,7 @@ class AffiliateActivateTest extends BaseTest
     public function testAttributesCanBeSet()
     {
         $GLOBALS['whmcsApi']->userid = 1;
-        $this->assertEquals('userid', $GLOBALS['whmcsApi']->moduleType);
+        $this->assertEquals('1', $GLOBALS['whmcsApi']->userid);
     }
 
     public function testCanMakeAPICall()
