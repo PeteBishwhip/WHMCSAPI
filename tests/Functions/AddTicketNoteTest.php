@@ -11,7 +11,7 @@ class AddTicketNoteTest extends BaseTest
     public function testCanUseAddTicketNoteCommand()
     {
         $GLOBALS['whmcsApi']->command('AddTicketNote');
-        $this->assertEquals('AddClientNote', $GLOBALS['whmcsApi']->action);
+        $this->assertEquals('AddTicketNote', $GLOBALS['whmcsApi']->action);
     }
 
     public function testNoNotesCauseException()
