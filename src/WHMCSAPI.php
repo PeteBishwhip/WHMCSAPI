@@ -16,6 +16,7 @@ class WHMCSAPI
     protected $selectedCommand;
     protected $whmcsUrl;
     protected $lastResponse;
+    protected $varsForSend = [];
     protected $responseType = 'json';
     public $action;
 
@@ -42,11 +43,30 @@ class WHMCSAPI
         if (defined($this->selectedCommand . '::DEFAULTS')) {
             $attributeDefaults = $this->selectedCommand::DEFAULTS;
         }
+
         foreach ($this->selectedCommand::ATTRIBUTES as $attribute) {
-            if (isset($attributeDefaults) && array_key_exists($attribute, $attributeDefaults)) {
-                $this->{$attribute} = $attributeDefaults[$attribute];
+            if (
+                defined($this->selectedCommand . '::INCREMENTAL_ATTRIBUTES')
+                && array_key_exists($attribute, $this->selectedCommand::INCREMENTAL_ATTRIBUTES)
+            ) {
+                $attributeIncrementNumber = $this->selectedCommand::INCREMENTAL_ATTRIBUTES[$attribute];
+                for ($i = 1; $i <= $attributeIncrementNumber; $i++) {
+                    if (isset($attributeDefaults) && array_key_exists($attribute, $attributeDefaults)) {
+                        $this->{$attribute.$i} = $attributeDefaults[$attribute];
+                        $this->varsForSend[] = $attribute.$i;
+                    } else {
+                        $this->{$attribute.$i} = null;
+                        $this->varsForSend[] = $attribute.$i;
+                    }
+                }
             } else {
-                $this->{$attribute} = null;
+                if (isset($attributeDefaults) && array_key_exists($attribute, $attributeDefaults)) {
+                    $this->{$attribute} = $attributeDefaults[$attribute];
+                    $this->varsForSend[] = $attribute;
+                } else {
+                    $this->{$attribute} = null;
+                    $this->varsForSend[] = $attribute;
+                }
             }
         }
         $this->action = $this->selectedCommand::$action;
@@ -70,19 +90,13 @@ class WHMCSAPI
             'responsetype' => $this->responseType,
         ];
 
-        foreach ($this->selectedCommand::ATTRIBUTES as $attribute) {
+        foreach ($this->varsForSend as $attribute) {
             $requiredAttributes = $this->selectedCommand::REQUIRED_ATTRIBUTES;
             $additionalRequirements = $this->selectedCommand::ADDITIONAL_REQUIREMENTS;
 
             if (in_array($attribute, $requiredAttributes)) {
                 if (is_null($this->{$attribute})) {
                     throw new NotServiceable("{$attribute} is a required attribute. Not set.");
-                }
-
-                if ($this->{$attribute} === false) {
-                    $this->{$attribute} = '0';
-                } elseif ($this->{$attribute} === true) {
-                    $this->{$attribute} = '1';
                 }
             }
 
