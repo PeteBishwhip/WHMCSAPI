@@ -42,7 +42,7 @@ try {
     // $e->getMessage();
 }
 ```
-If the command is not available, a `\WHMCSAPI\Exception\FunctionNotFound` exception will be thrown to allow for catching errors.
+If the command is not available, a `\WHMCSAPI\Exception\FunctionNotFound` exception will be thrown to allow for catching errors. If you want to perform all actions in the same try/catch, catch `WHMCSAPI\Exception\Exception`. All exceptions extend from this.
 
 From there, you can set any variables as documented in the WHMCS Developer Documentation:
 
@@ -56,7 +56,7 @@ $result = $whmcsApi->execute();
 ```
 
 ## Contributing
-Please feel free to contribute. A proper "Contributing" guide will be created in due course.
+Please see CONTRIBUTING.md for advice and guidance.
 
 [mergify]: https://mergify.io
 [mergify-status]: https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/PeteBishwhip/WHMCSAPI&style=flat
