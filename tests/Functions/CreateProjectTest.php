@@ -24,7 +24,7 @@ class CreateProjectTest extends BaseTest
     public function testAttributesCanBeSet()
     {
         $GLOBALS['whmcsApi']->title = 'This is a title';
-        $GLOBALS['whmcsApi']->adminid = 'This is a test note';
+        $GLOBALS['whmcsApi']->adminid = 1;
         $GLOBALS['whmcsApi']->duedate = date('Y-m-d');
         $this->assertEquals('This is a title', $GLOBALS['whmcsApi']->title);
     }
