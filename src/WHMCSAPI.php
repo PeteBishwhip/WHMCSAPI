@@ -52,11 +52,11 @@ class WHMCSAPI
                 $attributeIncrementNumber = $this->selectedCommand::INCREMENTAL_ATTRIBUTES[$attribute];
                 for ($i = 1; $i <= $attributeIncrementNumber; $i++) {
                     if (isset($attributeDefaults) && array_key_exists($attribute, $attributeDefaults)) {
-                        $this->{$attribute.$i} = $attributeDefaults[$attribute];
-                        $this->varsForSend[] = $attribute.$i;
+                        $this->{$attribute . $i} = $attributeDefaults[$attribute];
+                        $this->varsForSend[] = $attribute . $i;
                     } else {
-                        $this->{$attribute.$i} = null;
-                        $this->varsForSend[] = $attribute.$i;
+                        $this->{$attribute . $i} = null;
+                        $this->varsForSend[] = $attribute . $i;
                     }
                 }
             } else {
