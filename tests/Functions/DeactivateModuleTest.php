@@ -7,7 +7,7 @@ use WHMCSAPI\Tests\BaseTest;
 
 class DeactivateModuleTest extends BaseTest
 {
-    public function testCanUseActivateModuleCommand()
+    public function testCanUseDeactivateModuleCommand()
     {
         $GLOBALS['whmcsApi']->command('DeactivateModule');
         $this->assertEquals('DeactivateModule', $GLOBALS['whmcsApi']->action);

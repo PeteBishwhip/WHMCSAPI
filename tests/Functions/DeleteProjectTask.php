@@ -5,26 +5,27 @@ namespace WHMCSAPI\Tests\Functions;
 use WHMCSAPI\Exception\NotServiceable;
 use WHMCSAPI\Tests\BaseTest;
 
-class DecryptPasswordTest extends BaseTest
+class DeleteProjectTask extends BaseTest
 {
 
-    public function testCanUseDecryptPasswordCommand()
+    public function testCanUseDeleteProjectCommand()
     {
-        $GLOBALS['whmcsApi']->command('DecryptPassword');
-        $this->assertEquals('DecryptPassword', $GLOBALS['whmcsApi']->action);
+        $GLOBALS['whmcsApi']->command('DeleteProject');
+        $this->assertEquals('DeleteProject', $GLOBALS['whmcsApi']->action);
     }
 
-    public function testNoPasswordCauseException()
+    public function testNoIDCauseException()
     {
-        $this->assertNull($GLOBALS['whmcsApi']->password2);
+        $this->assertNull($GLOBALS['whmcsApi']->projectid);
         $this->expectException(NotServiceable::class);
         $GLOBALS['whmcsApi']->execute();
     }
 
     public function testAttributesCanBeSet()
     {
-        $GLOBALS['whmcsApi']->password2 = 'fDFSSserew£$@!';
-        $this->assertEquals('fDFSSserew£$@!', $GLOBALS['whmcsApi']->password2);
+        $GLOBALS['whmcsApi']->projectid = 1;
+        $GLOBALS['whmcsApi']->taskid = 1;
+        $this->assertEquals(1, $GLOBALS['whmcsApi']->projectid);
     }
 
     public function testCanMakeAPICall()
@@ -32,7 +33,8 @@ class DecryptPasswordTest extends BaseTest
         $result = $GLOBALS['whmcsApi']->execute();
         $this->assertJson($result);
         $result = (json_decode($result, true))['postData'];
-        $this->assertArrayHasKey('password2', $result);
+        $this->assertArrayHasKey('projectid', $result);
+        $this->assertArrayHasKey('taskid', $result);
         unset($result['username'], $result['password'], $result['responsetype']);
         foreach ($result as $attribute => $value) {
             $this->assertEquals($GLOBALS['whmcsApi']->{$attribute}, $value);

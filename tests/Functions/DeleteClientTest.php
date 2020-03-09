@@ -5,26 +5,26 @@ namespace WHMCSAPI\Tests\Functions;
 use WHMCSAPI\Exception\NotServiceable;
 use WHMCSAPI\Tests\BaseTest;
 
-class DecryptPasswordTest extends BaseTest
+class DeleteClientTest extends BaseTest
 {
 
-    public function testCanUseDecryptPasswordCommand()
+    public function testCanUseDeleteClientCommand()
     {
-        $GLOBALS['whmcsApi']->command('DecryptPassword');
-        $this->assertEquals('DecryptPassword', $GLOBALS['whmcsApi']->action);
+        $GLOBALS['whmcsApi']->command('DeleteClient');
+        $this->assertEquals('DeleteClient', $GLOBALS['whmcsApi']->action);
     }
 
-    public function testNoPasswordCauseException()
+    public function testNoIDCauseException()
     {
-        $this->assertNull($GLOBALS['whmcsApi']->password2);
+        $this->assertNull($GLOBALS['whmcsApi']->clientid);
         $this->expectException(NotServiceable::class);
         $GLOBALS['whmcsApi']->execute();
     }
 
     public function testAttributesCanBeSet()
     {
-        $GLOBALS['whmcsApi']->password2 = 'fDFSSserew£$@!';
-        $this->assertEquals('fDFSSserew£$@!', $GLOBALS['whmcsApi']->password2);
+        $GLOBALS['whmcsApi']->clientid = 1;
+        $this->assertEquals(1, $GLOBALS['whmcsApi']->clientid);
     }
 
     public function testCanMakeAPICall()
@@ -32,7 +32,7 @@ class DecryptPasswordTest extends BaseTest
         $result = $GLOBALS['whmcsApi']->execute();
         $this->assertJson($result);
         $result = (json_decode($result, true))['postData'];
-        $this->assertArrayHasKey('password2', $result);
+        $this->assertArrayHasKey('clientid', $result);
         unset($result['username'], $result['password'], $result['responsetype']);
         foreach ($result as $attribute => $value) {
             $this->assertEquals($GLOBALS['whmcsApi']->{$attribute}, $value);

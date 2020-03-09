@@ -8,13 +8,13 @@ use WHMCSAPI\Tests\BaseTest;
 class DeleteAnnouncementTest extends BaseTest
 {
 
-    public function testCanUseAcceptOrderCommand()
+    public function testCanUseDeleteAnnouncementCommand()
     {
         $GLOBALS['whmcsApi']->command('DeleteAnnouncement');
         $this->assertEquals('DeleteAnnouncement', $GLOBALS['whmcsApi']->action);
     }
 
-    public function testNoPasswordCauseException()
+    public function testNoIDCauseException()
     {
         $this->assertNull($GLOBALS['whmcsApi']->announcementid);
         $this->expectException(NotServiceable::class);

@@ -8,7 +8,7 @@ use WHMCSAPI\Tests\BaseTest;
 class CreateQuoteTest extends BaseTest
 {
 
-    public function testCanUseAcceptOrderCommand()
+    public function testCanUseCreateQuoteCommand()
     {
         $GLOBALS['whmcsApi']->command('CreateQuote');
         $this->assertEquals('CreateQuote', $GLOBALS['whmcsApi']->action);
