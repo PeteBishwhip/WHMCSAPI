@@ -188,10 +188,13 @@ class WHMCSAPI
                 $valid = (bool) (filter_var($data, FILTER_VALIDATE_EMAIL));
                 break;
             case 'float':
-                $valid =  (bool) (is_numeric($data)) ? (is_float($data + 0)) : false;
+                $valid = (bool) (is_numeric($data)) ? (is_float($data + 0)) : false;
                 break;
             case 'boolean':
                 $valid = (bool) (is_bool($data));
+                break;
+            case 'base64serializedarray':
+                $valid = (bool) (is_array(unserialize(base64_decode($data))));
                 break;
             default:
                 $valid =  false;
